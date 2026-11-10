@@ -9,7 +9,7 @@ from preprocess import load_docs
 
 app = Flask(__name__)
 BASE_DIR = Path(__file__).resolve().parent
-DATA_PATH = BASE_DIR / "news.jsonl"
+DATA_PATH = BASE_DIR / "clean.jsonl"
 INDEX_PATH = BASE_DIR / "index.pkl"
 PER_PAGE = 5
 
@@ -24,13 +24,13 @@ def load_or_build_index():
         try:
             with INDEX_PATH.open("rb") as file:
                 saved = pickle.load(file)
-            if saved.get("dataset_time") == dataset_time:
+            if saved.get("dataset_time") == dataset_time and saved.get("dataset_path") == str(DATA_PATH.resolve()):
                 return saved["index"]
         except (OSError, EOFError, pickle.PickleError, AttributeError, TypeError):
             pass
     built = build_index(DOCS)
     with INDEX_PATH.open("wb") as file:
-        pickle.dump({"dataset_time": dataset_time, "index": built}, file, protocol=pickle.HIGHEST_PROTOCOL)
+        pickle.dump({"dataset_time": dataset_time, "dataset_path": str(DATA_PATH.resolve()), "index": built}, file, protocol=pickle.HIGHEST_PROTOCOL)
     return built
 
 
@@ -81,3 +81,4 @@ def search_endpoint():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
