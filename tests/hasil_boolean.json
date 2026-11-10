@@ -1,0 +1,70 @@
+﻿{
+    "page":  1,
+    "per_page":  5,
+    "query":  "climate AND policy",
+    "results":  [
+                    {
+                        "authors":  [
+                                        "Alexander C. Kaufman"
+                                    ],
+                        "category":  "POLITICS",
+                        "date":  "2021-07-18",
+                        "headline":  "With Disasters Mounting By The Day, The U.S. May Finally Enact Real Climate Policy",
+                        "id":  2334,
+                        "link":  "https://www.huffpost.com/entry/natural-disasters-climate-policy_n_60f1e92be4b0d5140ebfe89c",
+                        "short_description":  "But there are some big “ifs.”",
+                        "year":  2021
+                    },
+                    {
+                        "authors":  [
+                                        "Alexander C. Kaufman"
+                                    ],
+                        "category":  "POLITICS",
+                        "date":  "2021-04-14",
+                        "headline":  "Here\u0027s What A Civilian Climate Corps Could Look Like",
+                        "id":  2895,
+                        "link":  "https://www.huffpost.com/entry/civilian-climate-corps-biden-plan_n_606f6a7ec5b62ff28f406914",
+                        "short_description":  "A new proposal from an influential policy outfit outlines how the Biden administration could put 1.5 million Americans to work.",
+                        "year":  2021
+                    },
+                    {
+                        "authors":  [
+                                        "Daniel Marans"
+                                    ],
+                        "category":  "POLITICS",
+                        "date":  "2019-05-12",
+                        "headline":  "Joe Biden\u0027s Rivals In Democratic Race Reject His ‘Middle Ground’ On Climate Policy",
+                        "id":  6796,
+                        "link":  "https://www.huffpost.com/entry/joe-biden-democratic-rivals-climate-change-middle-ground_n_5cd828dce4b054da4e8af616",
+                        "short_description":  "The former vice president’s approach drew criticism from Washington Gov. Jay Inslee (D), as well as Sens. Bernie Sanders (I-Vt.) and Kirsten Gillibrand (D-N.Y.).",
+                        "year":  2019
+                    },
+                    {
+                        "authors":  [
+                                        "Alexander C. Kaufman"
+                                    ],
+                        "category":  "POLITICS",
+                        "date":  "2019-01-04",
+                        "headline":  "Beto O\u0027Rourke Is \u0027Supportive Of The Concept\u0027 Of A Green New Deal",
+                        "id":  7497,
+                        "link":  "https://www.huffpost.com/entry/beto-orourke-green-new-deal_n_5c2f9949e4b0e755f65c7823",
+                        "short_description":  "The former Texas congressman joins an increasingly crowded field of potential 2020 contenders in flirting with the sweeping climate policy.",
+                        "year":  2019
+                    },
+                    {
+                        "authors":  [
+                                        "Alexander C. Kaufman",
+                                        "Laura Bassett"
+                                    ],
+                        "category":  "MEDIA",
+                        "date":  "2018-04-08",
+                        "headline":  "Sunday Shows Shirk Climate Experts After A Firestorm Week For EPA Chief Scott Pruitt",
+                        "id":  11279,
+                        "link":  "https://www.huffingtonpost.com/entry/sunday-shows-pruitt_us_5ac93a95e4b09d0a119464a3",
+                        "short_description":  "This comes the same week the EPA, amid Pruitt\u0027s ballooning ethics scandals, rolled back the federal government\u0027s only major climate policy.",
+                        "year":  2018
+                    }
+                ],
+    "total_pages":  8,
+    "total_results":  36
+}
