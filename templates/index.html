@@ -1,0 +1,922 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NusaNews - Berita</title>
+
+<style>
+:root {
+  --bg:#292a2d;
+  --header:#171717;
+  --panel:#1f1f1f;
+  --soft:#303134;
+  --line:#45474b;
+  --text:#e8eaed;
+  --muted:#aeb4bc;
+  --blue:#8ab4f8;
+  --cyan:#80cbc4;
+  --purple:#c4a7ff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Arial,Roboto,"Segoe UI",sans-serif;
+}
+button,input,select{font:inherit}
+button,a{cursor:pointer}
+a{color:inherit;text-decoration:none}
+
+.topbar{
+  position:sticky;top:0;z-index:10;
+  display:grid;grid-template-columns:1fr minmax(250px,650px) 1fr;
+  align-items:center;gap:20px;padding:12px 20px;
+  background:var(--header);border-bottom:1px solid #393939;
+}
+.brand{font-size:22px;font-weight:bold;white-space:nowrap}
+.brand span{color:var(--blue)}
+.search{
+  display:flex;align-items:center;gap:12px;
+  background:#3c4043;border-radius:30px;padding:0 18px;height:44px;
+}
+.search input{
+  width:100%;border:0;outline:0;color:white;background:transparent;
+}
+.search button{border:0;background:none;color:white;font-size:20px}
+.avatar{
+  justify-self:end;background:#8e63ce;border-radius:50%;
+  width:32px;height:32px;display:grid;place-items:center;
+}
+.nav{
+  display:flex;justify-content:center;gap:28px;
+  overflow-x:auto;white-space:nowrap;padding:13px;
+  background:var(--header);border-bottom:1px solid var(--line);
+}
+.nav a{font-size:13px;color:#ddd}
+.nav a:hover,.nav a.active{color:var(--blue)}
+
+.container{max-width:1100px;width:94%;margin:22px auto}
+.welcome{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;margin-bottom:20px;
+}
+h1{font-size:25px;font-weight:500;margin:0}
+.subtitle{font-size:13px;color:var(--muted);margin-top:5px}
+.badge{
+  background:#202124;border:1px solid var(--line);
+  border-radius:25px;padding:9px 13px;font-size:11px;color:#ddd;
+}
+
+.layout{
+  display:grid;grid-template-columns:minmax(0,2fr) minmax(260px,.95fr);
+  gap:15px;align-items:start;
+}
+.column{display:grid;gap:15px;min-width:0}
+.panel{
+  background:var(--panel);border-radius:17px;
+  padding:17px;border:1px solid #303030;min-width:0;
+}
+.heading{
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid #505050;padding-bottom:13px;margin-bottom:14px;
+}
+.heading h2{font-size:17px;font-weight:500;color:var(--blue);margin:0}
+.heading.cyan h2{color:var(--cyan)}
+.heading.purple h2{color:var(--purple)}
+.heading small{color:var(--muted);font-size:11px}
+
+.filters{
+  display:grid;grid-template-columns:1.2fr .7fr .7fr 1fr auto;
+  gap:9px;align-items:end;background:#202124;
+  padding:14px;border-radius:13px;margin-bottom:15px;
+  border:1px solid #414141;
+}
+.filter-title{grid-column:1/-1;font-size:12px;font-weight:bold}
+.field{display:grid;gap:5px;min-width:0}
+.field label{font-size:10px;color:var(--muted)}
+.field input,.field select{
+  width:100%;height:37px;background:#303134;
+  border:1px solid #505257;border-radius:7px;
+  color:white;padding:0 9px;outline:none;font-size:12px;
+}
+.field input:focus,.field select:focus{border-color:var(--blue)}
+.actions{display:flex;gap:6px}
+.btn{
+  height:37px;padding:0 12px;border:0;border-radius:7px;
+  font-size:11px;font-weight:bold;
+}
+.primary{background:var(--blue);color:#17202a}
+.secondary{background:#414141;color:white}
+
+.toolbar{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:10px;margin-bottom:12px;font-size:11px;color:var(--muted);
+}
+.status{color:#81c995}
+.status.mock{color:#f5cf72}
+
+.stories{
+  display:grid;grid-template-columns:.9fr 1.1fr;gap:17px;
+}
+.lead{min-width:0}
+.lead-art{
+  height:145px;border-radius:12px;margin-bottom:12px;
+  display:grid;place-items:center;
+  background:radial-gradient(circle at 75% 25%,#516d91,transparent 40%),
+  linear-gradient(135deg,#29394c,#202124);
+  color:#c9dcfa;font-size:70px;font-weight:bold;
+}
+.meta{font-size:10px;color:var(--muted);margin-bottom:7px}
+.lead h3{font-size:20px;font-weight:500;line-height:1.3;margin:7px 0}
+.lead p,.related p,.more p{
+  color:#bdc2c9;font-size:11px;line-height:1.55;
+}
+.author{font-size:10px;color:#9ea5ae}
+.read{color:var(--blue);font-size:10px;font-weight:bold}
+.related article{
+  padding:5px 0 13px;border-bottom:1px solid var(--line);
+}
+.related article+article{padding-top:13px}
+.related h3,.more h3{
+  font-size:13px;font-weight:500;line-height:1.4;margin:6px 0;
+}
+.more{border-top:1px solid #555;margin-top:14px}
+.more article{
+  display:flex;justify-content:space-between;gap:12px;
+  padding:13px 0;border-bottom:1px solid var(--line);
+}
+.more-copy{min-width:0}
+.more-mark{
+  flex:0 0 60px;height:60px;border-radius:9px;
+  display:grid;place-items:center;background:#394657;
+  color:var(--blue);font-size:25px;font-weight:bold;
+}
+mark{background:#fdd663;color:#202124;border-radius:2px}
+
+.side-item{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:10px;padding:13px 0;border-bottom:1px solid var(--line);
+}
+.side-item:last-child{border:0}
+.side-item small{display:block;color:var(--muted);font-size:9px}
+.side-item strong{font-size:12px;font-weight:500}
+.side-number{
+  background:#303a48;color:var(--blue);padding:9px;
+  border-radius:8px;font-size:12px;
+}
+.boolean p{font-size:11px;color:#bdc2c9;line-height:1.5}
+.boolean code{
+  display:inline-block;padding:5px 7px;margin:2px;
+  border:1px solid #484b50;border-radius:5px;
+  color:var(--blue);font-size:10px;
+}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.stat{padding:12px;background:#292a2d;border-radius:9px}
+.stat strong{display:block;font-size:17px}
+.stat small{font-size:9px;color:var(--muted)}
+
+.pagination{
+  display:flex;align-items:center;justify-content:center;
+  gap:12px;border-top:1px solid var(--line);padding-top:15px;margin-top:15px;
+}
+.pagination button{
+  background:#303134;color:white;border:1px solid #505257;
+  padding:9px 13px;border-radius:20px;font-size:11px;
+}
+.pagination button:disabled{opacity:.35;cursor:not-allowed}
+#pageInfo{font-size:11px;color:var(--muted)}
+.loading,.empty{text-align:center;padding:25px;color:var(--muted);font-size:12px}
+.empty{display:none}
+.footer{text-align:center;color:#858b93;font-size:10px;margin:25px 0}
+
+@media(max-width:900px){
+  .topbar{grid-template-columns:auto 1fr auto;gap:10px}
+  .layout{grid-template-columns:1fr}
+  .filters{grid-template-columns:repeat(2,1fr)}
+  .filter-title,.actions{grid-column:1/-1}
+  .actions{justify-content:flex-end}
+}
+@media(max-width:600px){
+  .topbar{grid-template-columns:1fr auto}
+  .search{grid-column:1/-1;grid-row:2}
+  .nav{justify-content:flex-start;gap:20px}
+  .container{width:94%;margin-top:16px}
+  .welcome{align-items:flex-start}
+  .badge{font-size:9px}
+  .layout{grid-template-columns:1fr}
+  .stories{grid-template-columns:1fr}
+  .related{border-top:1px solid var(--line);padding-top:10px}
+  .filters{grid-template-columns:1fr 1fr}
+  .actions .btn{flex:1}
+  .panel{padding:13px}
+  h1{font-size:21px}
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <a class="brand" href="/">Nusa<span>News</span></a>
+
+  <form class="search" id="searchForm">
+    <span>⌕</span>
+    <input id="queryInput" type="search"
+      placeholder="Telusuri topik, kategori & penulis">
+    <button type="submit">⌕</button>
+  </form>
+
+  <div class="avatar">N</div>
+</header>
+
+<nav class="nav">
+  <a href="#hasil" class="active" data-category="">Beranda</a>
+  <a href="#hasil" data-category="POLITICS">Politik</a>
+  <a href="#hasil" data-category="THE WORLDPOST">Dunia</a>
+  <a href="#hasil" data-category="BUSINESS">Bisnis</a>
+  <a href="#hasil" data-category="TECH">Teknologi</a>
+  <a href="#hasil" data-category="ENTERTAINMENT">Hiburan</a>
+  <a href="#hasil" data-category="SPORTS">Olahraga</a>
+  <a href="#hasil" data-category="SCIENCE">Sains</a>
+  <a href="#hasil" data-category="HEALTHY LIVING">Kesehatan</a>
+</nav>
+
+<div class="container">
+
+  <section class="welcome">
+    <div>
+      <h1>Rangkuman berita</h1>
+      <div class="subtitle">
+        Temukan berita berdasarkan kata kunci dan kategori.
+      </div>
+    </div>
+    <div class="badge">● Arsip HuffPost · 2012–2022</div>
+  </section>
+
+  <form class="filters" id="filterForm">
+    <div class="filter-title">☷ Filter pencarian lanjutan</div>
+
+    <div class="field">
+      <label for="category">KATEGORI</label>
+      <select id="category">
+        <option value="">Semua kategori</option>
+        <option>POLITICS</option>
+        <option>WELLNESS</option>
+        <option>ENTERTAINMENT</option>
+        <option>TRAVEL</option>
+        <option>STYLE & BEAUTY</option>
+        <option>PARENTING</option>
+        <option>HEALTHY LIVING</option>
+        <option>QUEER VOICES</option>
+        <option>FOOD & DRINK</option>
+        <option>BUSINESS</option>
+        <option>COMEDY</option>
+        <option>SPORTS</option>
+        <option>TECH</option>
+        <option>SCIENCE</option>
+        <option>WORLD NEWS</option>
+        <option>THE WORLDPOST</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="yearFrom">TAHUN DARI</label>
+      <input id="yearFrom" type="number" min="2012" max="2022" placeholder="2012">
+    </div>
+
+    <div class="field">
+      <label for="yearTo">TAHUN SAMPAI</label>
+      <input id="yearTo" type="number" min="2012" max="2022" placeholder="2022">
+    </div>
+
+    <div class="field">
+      <label for="author">PENULIS</label>
+      <input id="author" type="text" placeholder="Nama penulis">
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn secondary" id="reset">Reset</button>
+      <button type="submit" class="btn primary">Terapkan</button>
+    </div>
+  </form>
+
+  <div class="layout">
+
+    <main class="column">
+      <section class="panel" id="hasil">
+
+        <div class="heading">
+          <h2 id="resultHeading">Artikel populer</h2>
+          <small>NusaNews › Arsip berita</small>
+        </div>
+
+        <div class="toolbar">
+          <span id="resultCount">Memuat berita...</span>
+          <span id="status" class="status mock">● Data contoh</span>
+        </div>
+
+        <div id="loading" class="loading">Memuat berita...</div>
+        <div id="results"></div>
+
+        <div id="empty" class="empty">
+          <h3>Berita tidak ditemukan</h3>
+          <p>Coba kata kunci atau filter lainnya.</p>
+        </div>
+
+        <div class="pagination" id="pagination" hidden>
+          <button id="prev" type="button">← Sebelumnya</button>
+          <span id="pageInfo">Halaman 1</span>
+          <button id="next" type="button">Berikutnya →</button>
+        </div>
+
+      </section>
+    </main>
+
+    <aside class="column">
+
+      <section class="panel">
+        <div class="heading cyan">
+          <h2>Topik pilihan</h2>
+          <small>Jelajahi ›</small>
+        </div>
+
+        <div class="side-item" data-category="POLITICS">
+          <div><small>NASIONAL & GLOBAL</small><strong>Politik dan kebijakan publik</strong></div>
+          <span class="side-number">01</span>
+        </div>
+        <div class="side-item" data-category="BUSINESS">
+          <div><small>EKONOMI</small><strong>Bisnis dan perkembangan pasar</strong></div>
+          <span class="side-number">02</span>
+        </div>
+        <div class="side-item" data-category="TECH">
+          <div><small>INOVASI</small><strong>Teknologi dan sains</strong></div>
+          <span class="side-number">03</span>
+        </div>
+        <div class="side-item" data-category="ENTERTAINMENT">
+          <div><small>POPULER</small><strong>Hiburan dan budaya</strong></div>
+          <span class="side-number">04</span>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="heading purple">
+          <h2>Panduan pencarian</h2>
+          <small>Boolean Search</small>
+        </div>
+        <div class="boolean">
+          <p>Gunakan operator logika untuk mempersempit hasil pencarian.</p>
+          <code>climate AND policy</code>
+          <code>health OR wellness</code>
+          <code>technology NOT gaming</code>
+          <p>Gunakan tanda kurung untuk mengelompokkan kondisi:</p>
+          <code>(climate OR energy) AND policy</code>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="heading">
+          <h2>Tentang koleksi</h2>
+          <small>Dataset</small>
+        </div>
+        <div class="stats">
+          <div class="stat"><strong>210.294</strong><small>Rekam berita</small></div>
+          <div class="stat"><strong>2012–2022</strong><small>Periode data</small></div>
+          <div class="stat"><strong>6</strong><small>Atribut terpilih</small></div>
+          <div class="stat"><strong>AND OR NOT</strong><small>Operator Boolean</small></div>
+        </div>
+      </section>
+
+    </aside>
+  </div>
+
+  <div class="footer">
+    NusaNews · Sistem Temu Kembali Informasi · HuffPost News Category Dataset
+  </div>
+</div>
+
+<script>
+const PER_PAGE = 6;
+
+let currentPage = 1;
+let totalPages = 1;
+
+const $ = id => document.getElementById(id);
+
+/* DATA CONTOH UNTUK FRONTEND */
+const MOCK_NEWS = [
+  {
+    id:1,
+    category:"POLITICS",
+    headline:"How Climate Policy Is Reshaping the Global Energy Debate",
+    authors:"Maya Thompson",
+    link:"",
+    short_description:"A closer look at how governments are balancing energy security, economic growth, and long-term climate commitments.",
+    date:"2022-11-18"
+  },
+  {
+    id:2,
+    category:"BUSINESS",
+    headline:"Small Businesses Turn to Digital Tools to Reach New Customers",
+    authors:"Daniel Brooks",
+    link:"",
+    short_description:"Independent businesses are adopting online platforms, data tools, and digital payments.",
+    date:"2022-08-07"
+  },
+  {
+    id:3,
+    category:"TECH",
+    headline:"What the Next Generation of Computing Could Mean for Everyday Life",
+    authors:"Alicia Morgan",
+    link:"",
+    short_description:"Researchers and technology companies are exploring faster and more efficient systems.",
+    date:"2022-06-12"
+  },
+  {
+    id:4,
+    category:"ENTERTAINMENT",
+    headline:"The Films and Performances That Defined This Year's Conversation",
+    authors:"Jordan Lee",
+    link:"",
+    short_description:"Stories from independent cinema to major studio releases.",
+    date:"2021-12-21"
+  },
+  {
+    id:5,
+    category:"WELLNESS",
+    headline:"Building a Healthier Daily Routine Starts With Small Habits",
+    authors:"Sarah Wilson",
+    link:"",
+    short_description:"Experts explain why consistent sleep, movement, and realistic goals matter.",
+    date:"2021-09-03"
+  },
+  {
+    id:6,
+    category:"TRAVEL",
+    headline:"A Guide to Exploring Local Destinations More Responsibly",
+    authors:"Nadia Rahman",
+    link:"",
+    short_description:"Travelers are looking for meaningful experiences while supporting local communities.",
+    date:"2021-05-16"
+  },
+  {
+    id:7,
+    category:"SPORTS",
+    headline:"How Data Analytics Is Changing the Way Teams Prepare for Games",
+    authors:"Chris Evans",
+    link:"",
+    short_description:"Coaches and analysts are using performance data to understand player development.",
+    date:"2020-10-28"
+  },
+  {
+    id:8,
+    category:"FOOD & DRINK",
+    headline:"Why Home Cooking Became a New Creative Outlet",
+    authors:"Emily Carter",
+    link:"",
+    short_description:"Home cooks are experimenting with regional recipes and simple ingredients.",
+    date:"2020-07-09"
+  },
+  {
+    id:9,
+    category:"SCIENCE",
+    headline:"New Research Explores the Future of Clean Energy",
+    authors:"Olivia Green",
+    link:"",
+    short_description:"Scientists are investigating ways to improve energy efficiency.",
+    date:"2019-11-14"
+  },
+  {
+    id:10,
+    category:"PARENTING",
+    headline:"Helping Children Build Healthy Relationships With Technology",
+    authors:"Rebecca Hall",
+    link:"",
+    short_description:"Families and educators share approaches to screen time and online safety.",
+    date:"2019-04-22"
+  },
+  {
+    id:11,
+    category:"COMEDY",
+    headline:"The Internet Moments That Brought People Together",
+    authors:"Alex Rivera",
+    link:"",
+    short_description:"A collection of light-hearted stories and creative online moments.",
+    date:"2018-08-30"
+  },
+  {
+    id:12,
+    category:"HEALTHY LIVING",
+    headline:"Understanding the Connection Between Sleep and Focus",
+    authors:"Priya Shah",
+    link:"",
+    short_description:"Sleep researchers describe how regular rest supports memory and concentration.",
+    date:"2017-03-11"
+  }
+];
+
+/* AMBIL FILTER */
+function getFilters(){
+  return {
+    q:$("queryInput").value.trim(),
+    category:$("category").value,
+    year_from:$("yearFrom").value,
+    year_to:$("yearTo").value,
+    author:$("author").value.trim(),
+    page:currentPage,
+    per_page:PER_PAGE
+  };
+}
+
+/* SUSUN URL API */
+function buildURL(filters){
+  const params = new URLSearchParams();
+
+  Object.entries(filters).forEach(([key,value])=>{
+    if(value !== "" && value !== null && value !== undefined){
+      params.set(key,value);
+    }
+  });
+
+  return `/search?${params.toString()}`;
+}
+
+/* NORMALISASI DATA API */
+function normalizeArticle(item,index){
+  return {
+    id:item.id ?? item.doc_id ?? index,
+    category:item.category ?? "UNCATEGORIZED",
+    headline:item.headline ?? item.title ?? "Tanpa judul",
+    authors:Array.isArray(item.authors)
+      ? item.authors.join(", ")
+      : (item.authors || "Penulis tidak diketahui"),
+    link:item.link ?? item.url ?? "",
+    short_description:item.short_description ?? item.description ?? "",
+    date:item.date ?? ""
+  };
+}
+
+/* FILTER DATA SIMULASI */
+function filterMock(filters){
+  let data = [...MOCK_NEWS];
+
+  const q = filters.q.toLowerCase();
+  const category = filters.category.toLowerCase();
+  const author = filters.author.toLowerCase();
+
+  // Fallback sederhana, bukan parser Boolean lengkap.
+  const excluded = [...q.matchAll(/\bNOT\s+([\w'-]+)/g)]
+    .map(m=>m[1]);
+
+  const cleaned = q
+    .replace(/\bNOT\s+[\w'-]+/g," ")
+    .replace(/\b(AND|OR|NOT)\b/g," ")
+    .replace(/[()]/g," ");
+
+  const terms = cleaned.split(/\s+/).filter(Boolean);
+  const useOR = /\bOR\b/i.test(q);
+
+  if(terms.length){
+    data = data.filter(article=>{
+      const text = (
+        article.headline + " " + article.category
+      ).toLowerCase();
+
+      const matched = useOR
+        ? terms.some(term=>text.includes(term))
+        : terms.every(term=>text.includes(term));
+
+      const blocked = excluded.some(term=>text.includes(term));
+
+      return matched && !blocked;
+    });
+  }
+
+  if(category){
+    data = data.filter(a=>a.category.toLowerCase()===category);
+  }
+
+  if(filters.year_from){
+    data = data.filter(a=>
+      Number(a.date.substring(0,4)) >= Number(filters.year_from)
+    );
+  }
+
+  if(filters.year_to){
+    data = data.filter(a=>
+      Number(a.date.substring(0,4)) <= Number(filters.year_to)
+    );
+  }
+
+  if(author){
+    data = data.filter(a=>
+      a.authors.toLowerCase().includes(author)
+    );
+  }
+
+  const total = data.length;
+  const pages = Math.max(1,Math.ceil(total/PER_PAGE));
+  const start = (filters.page-1)*PER_PAGE;
+
+  return {
+    results:data.slice(start,start+PER_PAGE),
+    total,
+    page:filters.page,
+    total_pages:pages
+  };
+}
+
+/* REQUEST KE FLASK */
+async function requestSearch(filters){
+  const response = await fetch(buildURL(filters),{
+    method:"GET",
+    headers:{"Accept":"application/json"}
+  });
+
+  if(!response.ok){
+    throw new Error("HTTP "+response.status);
+  }
+
+  const payload = await response.json();
+
+  const list = Array.isArray(payload)
+    ? payload
+    : (payload.results ?? payload.data ?? []);
+
+  return {
+    results:list.map(normalizeArticle),
+    total:Number(payload.total ?? list.length),
+    page:Number(payload.page ?? filters.page),
+    total_pages:Number(
+      payload.total_pages ??
+      Math.max(1,Math.ceil(Number(payload.total ?? list.length)/PER_PAGE))
+    )
+  };
+}
+
+/* ESCAPE HTML UNTUK MENCEGAH HTML INJECTION */
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>"']/g,char=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[char]));
+}
+
+/* HIGHLIGHT KATA KUNCI */
+function highlight(text,query){
+  let safe = escapeHTML(text);
+
+  const words = query
+    .replace(/[()]/g," ")
+    .replace(/\b(AND|OR|NOT)\b/gi," ")
+    .match(/[\p{L}\p{N}'-]+/gu) || [];
+
+  const unique = [...new Set(words)].sort((a,b)=>b.length-a.length);
+
+  if(!unique.length) return safe;
+
+  const pattern = unique
+    .map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"))
+    .join("|");
+
+  return safe.replace(
+    new RegExp(`(${pattern})`,"gi"),
+    "<mark>$1</mark>"
+  );
+}
+
+/* FORMAT TANGGAL */
+function formatDate(value){
+  if(!value) return "Tanggal tidak tersedia";
+
+  const date = new Date(value);
+
+  if(Number.isNaN(date.getTime())) return value;
+
+  return new Intl.DateTimeFormat("id-ID",{
+    day:"numeric",
+    month:"short",
+    year:"numeric"
+  }).format(date);
+}
+
+/* LINK BERITA */
+function articleLink(article){
+  if(article.link && /^https?:\/\//i.test(article.link)){
+    return `<a class="read" href="${escapeHTML(article.link)}"
+      target="_blank" rel="noopener noreferrer">Baca berita ↗</a>`;
+  }
+
+  return `<span class="author">Arsip HuffPost</span>`;
+}
+
+/* RENDER BERITA */
+function renderResults(data,query){
+  const container = $("results");
+  container.innerHTML = "";
+
+  $("resultCount").textContent =
+    data.total.toLocaleString("id-ID")+" artikel ditemukan";
+
+  $("resultHeading").textContent = query
+    ? `Hasil pencarian: "${query}"`
+    : "Artikel populer";
+
+  $("empty").style.display = data.results.length ? "none":"block";
+
+  if(data.results.length){
+    const articles = data.results;
+
+    const lead = articles[0];
+
+    const leadHTML = `
+      <article class="lead">
+        <div class="lead-art">${escapeHTML(lead.category[0] || "N")}</div>
+        <div class="meta">
+          NusaNews · ${escapeHTML(lead.category)}
+          · ${escapeHTML(formatDate(lead.date))}
+        </div>
+        <h3>${highlight(lead.headline,query)}</h3>
+        <p>${highlight(lead.short_description,query)}</p>
+        <div class="author">Oleh ${escapeHTML(lead.authors)}</div>
+        ${articleLink(lead)}
+      </article>
+    `;
+
+    const relatedHTML = articles.slice(1,4).map(article=>`
+      <article>
+        <div class="meta">
+          NusaNews · ${escapeHTML(article.category)}
+          · ${escapeHTML(formatDate(article.date))}
+        </div>
+        <h3>${highlight(article.headline,query)}</h3>
+        <p>${highlight(article.short_description,query)}</p>
+        <div class="author">${escapeHTML(article.authors)}</div>
+        ${articleLink(article)}
+      </article>
+    `).join("");
+
+    container.innerHTML = `
+      <div class="stories">
+        ${leadHTML}
+        <div class="related">${relatedHTML}</div>
+      </div>
+    `;
+
+    const remaining = articles.slice(4);
+
+    if(remaining.length){
+      const more = document.createElement("div");
+      more.className = "more";
+
+      more.innerHTML = remaining.map(article=>`
+        <article>
+          <div class="more-copy">
+            <div class="meta">
+              ${escapeHTML(article.category)}
+              · ${escapeHTML(formatDate(article.date))}
+            </div>
+            <h3>${highlight(article.headline,query)}</h3>
+            <p>${highlight(article.short_description,query)}</p>
+            <div class="author">Oleh ${escapeHTML(article.authors)}</div>
+            ${articleLink(article)}
+          </div>
+          <div class="more-mark">${escapeHTML(article.category[0] || "N")}</div>
+        </article>
+      `).join("");
+
+      container.appendChild(more);
+    }
+  }
+
+  currentPage = Math.max(1,data.page);
+  totalPages = Math.max(1,data.total_pages);
+
+  $("pagination").hidden = data.total === 0;
+  $("prev").disabled = currentPage <= 1;
+  $("next").disabled = currentPage >= totalPages;
+
+  $("pageInfo").textContent =
+    `Halaman ${currentPage} dari ${totalPages}`;
+}
+
+/* FUNGSI UTAMA PENCARIAN */
+async function runSearch(){
+  const filters = getFilters();
+
+  const from = Number(filters.year_from);
+  const to = Number(filters.year_to);
+
+  if(from && to && from > to){
+    alert("Tahun dari tidak boleh lebih besar dari tahun sampai.");
+    return;
+  }
+
+  $("loading").style.display = "block";
+  $("results").style.display = "none";
+  $("empty").style.display = "none";
+
+  try{
+    const data = await requestSearch(filters);
+
+    $("status").textContent = "● Terhubung ke API";
+    $("status").className = "status";
+
+    renderResults(data,filters.q);
+
+  }catch(error){
+    console.warn("API belum tersedia, menggunakan data contoh:",error);
+
+    const data = filterMock(filters);
+
+    $("status").textContent = "● Data contoh";
+    $("status").className = "status mock";
+
+    renderResults(data,filters.q);
+
+  }finally{
+    $("loading").style.display = "none";
+    $("results").style.display = "block";
+  }
+}
+
+/* EVENT PENCARIAN */
+$("searchForm").addEventListener("submit",event=>{
+  event.preventDefault();
+  currentPage = 1;
+  runSearch();
+});
+
+/* EVENT FILTER */
+$("filterForm").addEventListener("submit",event=>{
+  event.preventDefault();
+  currentPage = 1;
+  runSearch();
+});
+
+/* RESET FILTER */
+$("reset").addEventListener("click",()=>{
+  $("queryInput").value = "";
+  $("category").value = "";
+  $("yearFrom").value = "";
+  $("yearTo").value = "";
+  $("author").value = "";
+
+  currentPage = 1;
+  runSearch();
+});
+
+/* PAGINATION */
+$("prev").addEventListener("click",()=>{
+  if(currentPage > 1){
+    currentPage--;
+    runSearch();
+  }
+});
+
+$("next").addEventListener("click",()=>{
+  if(currentPage < totalPages){
+    currentPage++;
+    runSearch();
+  }
+});
+
+/* NAVIGASI KATEGORI */
+document.querySelectorAll(".nav a[data-category]").forEach(link=>{
+  link.addEventListener("click",event=>{
+    event.preventDefault();
+
+    $("category").value = link.dataset.category;
+    currentPage = 1;
+
+    document.querySelectorAll(".nav a").forEach(a=>
+      a.classList.remove("active")
+    );
+
+    link.classList.add("active");
+    runSearch();
+  });
+});
+
+/* TOPIK PILIHAN */
+document.querySelectorAll(".side-item[data-category]").forEach(item=>{
+  item.style.cursor = "pointer";
+
+  item.addEventListener("click",()=>{
+    $("category").value = item.dataset.category;
+    currentPage = 1;
+    runSearch();
+
+    $("hasil").scrollIntoView({behavior:"smooth"});
+  });
+});
+
+/* JALANKAN SAAT HALAMAN DIBUKA */
+runSearch();
+</script>
+
+</body>
+</html>
