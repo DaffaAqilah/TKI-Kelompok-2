@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# Mengatur index utama agar langsung membaca index.html di dalam folder templates
+DirectoryIndex templates/index.html
+
+# Meneruskan semua request URL agar tetap mencari file di dalam folder templates jika ada
+RewriteCond %{REQUEST_URI} !^/templates/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ templates/$1 [L]
