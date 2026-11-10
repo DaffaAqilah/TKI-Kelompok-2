@@ -1,0 +1,24 @@
+stki-search/
+├── app.py                  # Saddam: server Flask + endpoint /search
+├── preprocess.py           # Ardi: load_docs, cleaning, tokenize
+├── index.py                # Naufal: build_index, save/load pickle
+├── boolean.py              # Daffa: search(query, index, all_ids)
+├── data/
+│   ├── raw/
+│   │   └── News_Category_Dataset.json   # dataset asli (jangan di-commit)
+│   ├── clean.jsonl                      # hasil cleaning Ardi
+│   └── index.pkl                        # hasil build Naufal (jangan di-commit)
+├── templates/
+│   └── index.html          # Mike: tampilan
+├── static/
+│   ├── style.css
+│   └── app.js              # fetch ke /search
+├── tests/
+│   ├── test_preprocess.py
+│   ├── test_index.py
+│   └── test_boolean.py     # tes parser (ditulis Ardi)
+├── docs/
+│   └── laporan/            # satu file bab per orang
+├── requirements.txt        # flask saja dulu
+├── .gitignore              # data/raw/, data/index.pkl, __pycache__/
+└── README.md               # cara menjalankan
