@@ -9,8 +9,8 @@ from preprocess import load_docs
 
 app = Flask(__name__)
 BASE_DIR = Path(__file__).resolve().parent
-DATA_PATH = BASE_DIR / "clean.jsonl"
-INDEX_PATH = BASE_DIR / "index.pkl"
+DATA_PATH = BASE_DIR / "data" / "clean.jsonl"
+INDEX_PATH = BASE_DIR / "data" / "index.pkl"
 PER_PAGE = 5
 
 DOCS = load_docs(DATA_PATH)
@@ -52,7 +52,15 @@ def search_endpoint():
     page = max(request.args.get("page", default=1, type=int), 1)
 
     try:
-        matching_ids = search(query, INDEX, ALL_IDS)
+        if query:
+            matching_ids = search(query, INDEX, ALL_IDS)
+        else:
+            # Tanpa kata kunci = mode jelajah (halaman awal & klik
+            # kategori di frontend memang tidak mengirim q): mulai
+            # dari semua dokumen, filter di bawah yang menyaring.
+            # Kontrak boolean.search tidak berubah: query kosong di
+            # parser tetap menghasilkan himpunan kosong.
+            matching_ids = ALL_IDS
     except ValueError as error:
         return jsonify({"error": str(error), "query": query}), 400
 
