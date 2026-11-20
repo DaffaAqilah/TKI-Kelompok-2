@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Index hasil build (dibangun ulang otomatis oleh app.py / index.py)
+data/index.pkl
+inverted_index.pkl
+
+# File sementara & sistem operasi
+*.log
+.DS_Store
+Thumbs.db
+
+# CATATAN: data/clean.jsonl dan data/raw/News_Category_Dataset_v3.json
+# SENGAJA tetap di-commit ke repo ini (keputusan kelompok), jadi
+# keduanya tidak dimasukkan ke .gitignore.
