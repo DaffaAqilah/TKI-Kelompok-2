@@ -1,5 +1,5 @@
 
-const PER_PAGE = 6;
+const PER_PAGE = 5;
 
 let currentPage = 1;
 let totalPages = 1;
@@ -237,7 +237,19 @@ async function requestSearch(filters) {
   });
 
   if (!response.ok) {
-    throw new Error("HTTP " + response.status);
+    // Keep the server's own error message (app.py sends {"error": ...})
+    // and the HTTP status, so callers can tell a client error (400 =
+    // invalid Boolean query) apart from the API being unreachable.
+    let message = "HTTP " + response.status;
+    try {
+      const errPayload = await response.json();
+      if (errPayload && errPayload.error) message = errPayload.error;
+    } catch (parseError) {
+      // Body was not JSON; keep the default "HTTP <status>" message.
+    }
+    const error = new Error(message);
+    error.status = response.status;
+    throw error;
   }
 
   const payload = await response.json();
@@ -426,6 +438,12 @@ async function runSearch() {
   $("results").style.display = "none";
   $("empty").style.display = "none";
 
+  // Restore the default empty-state text; an earlier invalid-query
+  // error may have replaced it (see the 400 branch in the catch below).
+  $("empty").querySelector("h3").textContent = "No Articles Found";
+  $("empty").querySelector("p").textContent =
+    "Try using different keywords or search filters.";
+
   try {
     const data = await requestSearch(filters);
 
@@ -435,6 +453,23 @@ async function runSearch() {
     renderResults(data, filters.q);
 
   } catch (error) {
+    if (error.status === 400) {
+      // Invalid Boolean query: show the server's error message in the
+      // empty state instead of silently falling back to sample data.
+      $("status").textContent = "● Invalid Query";
+      $("status").className = "status mock";
+
+      renderResults(
+        { results: [], total: 0, page: 1, total_pages: 1 },
+        filters.q
+      );
+
+      $("resultCount").textContent = "Invalid query";
+      $("empty").querySelector("h3").textContent = "Invalid Search Query";
+      $("empty").querySelector("p").textContent = error.message;
+      return;
+    }
+
     console.warn("API is unavailable. Using sample data instead:", error);
 
     const data = filterMock(filters);
