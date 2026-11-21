@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NusaNews - Berita</title>
+<title>NusaNews - News Search</title>
 
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
@@ -16,7 +17,7 @@
   <form class="search" id="searchForm">
     <span>⌕</span>
     <input id="queryInput" type="search"
-      placeholder="Telusuri topik, kategori & penulis">
+      placeholder="Search topics, categories & authors">
     <button type="submit">⌕</button>
   </form>
 
@@ -24,36 +25,36 @@
 </header>
 
 <nav class="nav">
-  <a href="#hasil" class="active" data-category="">Beranda</a>
-  <a href="#hasil" data-category="POLITICS">Politik</a>
-  <a href="#hasil" data-category="THE WORLDPOST">Dunia</a>
-  <a href="#hasil" data-category="BUSINESS">Bisnis</a>
-  <a href="#hasil" data-category="TECH">Teknologi</a>
-  <a href="#hasil" data-category="ENTERTAINMENT">Hiburan</a>
-  <a href="#hasil" data-category="SPORTS">Olahraga</a>
-  <a href="#hasil" data-category="SCIENCE">Sains</a>
-  <a href="#hasil" data-category="HEALTHY LIVING">Kesehatan</a>
+  <a href="#hasil" class="active" data-category="">Home</a>
+  <a href="#hasil" data-category="POLITICS">Politics</a>
+  <a href="#hasil" data-category="THE WORLDPOST">World</a>
+  <a href="#hasil" data-category="BUSINESS">Business</a>
+  <a href="#hasil" data-category="TECH">Technology</a>
+  <a href="#hasil" data-category="ENTERTAINMENT">Entertainment</a>
+  <a href="#hasil" data-category="SPORTS">Sports</a>
+  <a href="#hasil" data-category="SCIENCE">Science</a>
+  <a href="#hasil" data-category="HEALTHY LIVING">Health</a>
 </nav>
 
 <div class="container">
 
   <section class="welcome">
     <div>
-      <h1>Rangkuman berita</h1>
+      <h1>News Overview</h1>
       <div class="subtitle">
-        Temukan berita berdasarkan kata kunci dan kategori.
+        Discover news articles by keywords and categories.
       </div>
     </div>
-    <div class="badge">● Arsip HuffPost · 2012–2022</div>
+    <div class="badge">● HuffPost Archive · 2012–2022</div>
   </section>
 
   <form class="filters" id="filterForm">
-    <div class="filter-title">☷ Filter pencarian lanjutan</div>
+    <div class="filter-title">☷ Advanced Search Filters</div>
 
     <div class="field">
-      <label for="category">KATEGORI</label>
+      <label for="category">CATEGORY</label>
       <select id="category">
-        <option value="">Semua kategori</option>
+        <option value="">All Categories</option>
         <option>POLITICS</option>
         <option>WELLNESS</option>
         <option>ENTERTAINMENT</option>
@@ -74,23 +75,23 @@
     </div>
 
     <div class="field">
-      <label for="yearFrom">TAHUN DARI</label>
+      <label for="yearFrom">FROM YEAR</label>
       <input id="yearFrom" type="number" min="2012" max="2022" placeholder="2012">
     </div>
 
     <div class="field">
-      <label for="yearTo">TAHUN SAMPAI</label>
+      <label for="yearTo">TO YEAR</label>
       <input id="yearTo" type="number" min="2012" max="2022" placeholder="2022">
     </div>
 
     <div class="field">
-      <label for="author">PENULIS</label>
-      <input id="author" type="text" placeholder="Nama penulis">
+      <label for="author">AUTHOR</label>
+      <input id="author" type="text" placeholder="Enter author name">
     </div>
 
     <div class="actions">
       <button type="button" class="btn secondary" id="reset">Reset</button>
-      <button type="submit" class="btn primary">Terapkan</button>
+      <button type="submit" class="btn primary">Apply Filters</button>
     </div>
   </form>
 
@@ -100,27 +101,27 @@
       <section class="panel" id="hasil">
 
         <div class="heading">
-          <h2 id="resultHeading">Artikel populer</h2>
-          <small>NusaNews › Arsip berita</small>
+          <h2 id="resultHeading">Popular Articles</h2>
+          <small>NusaNews › News Archive</small>
         </div>
 
         <div class="toolbar">
-          <span id="resultCount">Memuat berita...</span>
-          <span id="status" class="status mock">● Data contoh</span>
+          <span id="resultCount">Loading articles...</span>
+          <span id="status" class="status mock">● Sample Data</span>
         </div>
 
-        <div id="loading" class="loading">Memuat berita...</div>
+        <div id="loading" class="loading">Loading articles...</div>
         <div id="results"></div>
 
         <div id="empty" class="empty">
-          <h3>Berita tidak ditemukan</h3>
-          <p>Coba kata kunci atau filter lainnya.</p>
+          <h3>No Articles Found</h3>
+          <p>Try using different keywords or search filters.</p>
         </div>
 
         <div class="pagination" id="pagination" hidden>
-          <button id="prev" type="button">← Sebelumnya</button>
-          <span id="pageInfo">Halaman 1</span>
-          <button id="next" type="button">Berikutnya →</button>
+          <button id="prev" type="button">← Previous</button>
+          <span id="pageInfo">Page 1</span>
+          <button id="next" type="button">Next →</button>
         </div>
 
       </section>
@@ -130,53 +131,53 @@
 
       <section class="panel">
         <div class="heading cyan">
-          <h2>Topik pilihan</h2>
-          <small>Jelajahi ›</small>
+          <h2>Featured Topics</h2>
+          <small>Explore ›</small>
         </div>
 
         <div class="side-item" data-category="POLITICS">
-          <div><small>NASIONAL & GLOBAL</small><strong>Politik dan kebijakan publik</strong></div>
+          <div><small>NATIONAL & GLOBAL</small><strong>Politics and Public Policy</strong></div>
           <span class="side-number">01</span>
         </div>
         <div class="side-item" data-category="BUSINESS">
-          <div><small>EKONOMI</small><strong>Bisnis dan perkembangan pasar</strong></div>
+          <div><small>ECONOMY</small><strong>Business and Market Trends</strong></div>
           <span class="side-number">02</span>
         </div>
         <div class="side-item" data-category="TECH">
-          <div><small>INOVASI</small><strong>Teknologi dan sains</strong></div>
+          <div><small>INNOVATION</small><strong>Technology and Science</strong></div>
           <span class="side-number">03</span>
         </div>
         <div class="side-item" data-category="ENTERTAINMENT">
-          <div><small>POPULER</small><strong>Hiburan dan budaya</strong></div>
+          <div><small>POPULAR</small><strong>Entertainment and Culture</strong></div>
           <span class="side-number">04</span>
         </div>
       </section>
 
       <section class="panel">
         <div class="heading purple">
-          <h2>Panduan pencarian</h2>
+          <h2>Search Guide</h2>
           <small>Boolean Search</small>
         </div>
         <div class="boolean">
-          <p>Gunakan operator logika untuk mempersempit hasil pencarian.</p>
+          <p>Use logical operators to refine your search results.</p>
           <code>climate AND policy</code>
           <code>health OR wellness</code>
           <code>technology NOT gaming</code>
-          <p>Gunakan tanda kurung untuk mengelompokkan kondisi:</p>
+          <p>Use parentheses to group search conditions:</p>
           <code>(climate OR energy) AND policy</code>
         </div>
       </section>
 
       <section class="panel">
         <div class="heading">
-          <h2>Tentang koleksi</h2>
+          <h2>About the Collection</h2>
           <small>Dataset</small>
         </div>
         <div class="stats">
-          <div class="stat"><strong>210.294</strong><small>Rekam berita</small></div>
-          <div class="stat"><strong>2012–2022</strong><small>Periode data</small></div>
-          <div class="stat"><strong>6</strong><small>Atribut terpilih</small></div>
-          <div class="stat"><strong>AND OR NOT</strong><small>Operator Boolean</small></div>
+          <div class="stat"><strong>210,294</strong><small>News Records</small></div>
+          <div class="stat"><strong>2012–2022</strong><small>Data Period</small></div>
+          <div class="stat"><strong>6</strong><small>Selected Attributes</small></div>
+          <div class="stat"><strong>AND OR NOT</strong><small>Boolean Operators</small></div>
         </div>
       </section>
 
@@ -184,7 +185,7 @@
   </div>
 
   <div class="footer">
-    NusaNews · Sistem Temu Kembali Informasi · HuffPost News Category Dataset
+    NusaNews · Information Retrieval System · HuffPost News Category Dataset
   </div>
 </div>
 
